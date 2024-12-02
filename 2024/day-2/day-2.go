@@ -17,7 +17,7 @@ func checkCondition(arrayInput []int, condition func(int, int) bool) (bool, int)
 	array := append([]int(nil), arrayInput...)
 
 	for i, curr := range array[1:] {
-		fmt.Println("index: ", i, "Current: ", curr)
+		//fmt.Println("index: ", i, "Current: ", curr)
 
 		prev := array[i]
 		if condition(prev, curr) {
@@ -26,7 +26,7 @@ func checkCondition(arrayInput []int, condition func(int, int) bool) (bool, int)
 				increment = currIncrement
 				prevIncrement = increment
 			}
-			fmt.Println("Increment: ", increment)
+			//fmt.Println("Increment: ", increment)
 		} else {
 			return false, increment
 		}
@@ -46,6 +46,7 @@ func increaseCheck(array []int) (bool, int) {
 // part 1
 func checkSafe(linesInput []string) int {
 	lines := append([]string(nil), linesInput...)
+	safeList := []int{}
 
 	safeCount := 0
 
@@ -56,7 +57,7 @@ func checkSafe(linesInput []string) int {
 		var number int
 		for i, _ := range line {
 
-			fmt.Println(i, "->", line[i:i+1])
+			//fmt.Println(i, "->", line[i:i+1])
 			if line[i:i+1] == " " {
 				lineArray = append(lineArray, number)
 				numberString = ""
@@ -76,6 +77,7 @@ func checkSafe(linesInput []string) int {
 		fmt.Println("Increase: ", increase, "Increment: ", incrementIncrease)
 
 		if (decrease && (incrementDecrease <= 3)) || increase && (incrementIncrease <= 3) {
+			safeList = append(safeList, i)
 			goto safe
 		}
 
@@ -85,14 +87,17 @@ func checkSafe(linesInput []string) int {
 
 	}
 	fmt.Println("SafeCount: ", safeCount)
+	fmt.Println("safeList: ", safeList)
 
 	return safeCount
 }
 
 // part 2
 func checkSafe2(linesInput []string) int {
-
 	lines := append([]string(nil), linesInput...)
+	safeList := []int{}
+	safeListOG := []int{}
+	safeListNew := []int{}
 
 	safeCount := 0
 
@@ -104,7 +109,7 @@ func checkSafe2(linesInput []string) int {
 		var number int
 		for i, _ := range line {
 
-			fmt.Println(i, "->", line[i:i+1])
+			//fmt.Println(i, "->", line[i:i+1])
 			if line[i:i+1] == " " {
 				lineArray = append(lineArray, number)
 				numberString = ""
@@ -115,8 +120,9 @@ func checkSafe2(linesInput []string) int {
 		}
 		lineArray = append(lineArray, number)
 		numberString = ""
-		fmt.Println("lineArray", lineArray)
+		//fmt.Println("lineArray", lineArray)
 		lineArrayCopy := append([]int(nil), lineArray...)
+
 	try_again:
 		decrease, incrementDecrease := decreaseCheck(lineArrayCopy)
 		fmt.Println("Decrease: ", decrease, "Increment: ", incrementDecrease)
@@ -124,14 +130,23 @@ func checkSafe2(linesInput []string) int {
 		fmt.Println("Increase: ", increase, "Increment: ", incrementIncrease)
 
 		if (decrease && (incrementDecrease <= 3)) || increase && (incrementIncrease <= 3) {
+			if curr_index_to_remove > 0 {
+				fmt.Println("SafeArray: ", lineArray, "DampedArray", lineArrayCopy, "curr_index_to_remove: ", curr_index_to_remove)
+				safeListNew = append(safeListNew, i)
+			}
+			if curr_index_to_remove == 0 {
+				safeListOG = append(safeListOG, i)
+			}
+			safeList = append(safeList, i)
+
 			goto safe
 		}
+		fmt.Println("array: ", lineArrayCopy)
 		fmt.Println("curr_index_to_remove: ", curr_index_to_remove)
-		fmt.Println("lineArrayCopylen: ", len(lineArrayCopy))
 
 		lineArrayCopy = append([]int(nil), lineArray...)
 
-		if curr_index_to_remove+1 == len(lineArray) {
+		if curr_index_to_remove == len(lineArray) {
 			continue
 		}
 
@@ -148,6 +163,12 @@ func checkSafe2(linesInput []string) int {
 	}
 
 	fmt.Println("Part 2 - SafeCount: ", safeCount)
+	fmt.Println("safeList: ", safeList)
+	fmt.Println("safeListOG: ", safeListOG)
+	fmt.Println("safeListNew: ", safeListNew)
+	fmt.Println("safeListLenOG Part 1: ", len(safeListOG))
+	fmt.Println("safeListLen Part 2: ", len(safeList))
+	fmt.Println("safeListLenNew: ", len(safeListNew))
 
 	return safeCount
 }
@@ -159,7 +180,7 @@ func main() {
 		log.Fatalf("readFail: %s", err)
 	}
 
-	checkSafe(lines)
+	//checkSafe(lines)
 
 	checkSafe2(lines)
 
