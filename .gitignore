@@ -10,6 +10,7 @@
 *.vscode
 *.hello.go
 hello.go
+day-2-scrap.go
 # Test binary, built with `go test -c`
 *.test
 

@@ -1,75 +1,13 @@
 package main
 
 import (
-	"bufio"
+	"2024/shared"
 	"fmt"
 	"strconv"
 
 	// "io"
 	"log"
-	"os"
 )
-
-func abSub(x int, y int) int {
-	if x > y {
-		return x - y
-	}
-	return y - x
-}
-func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
-}
-
-func containsCount(array []int, value int) int {
-	count := 0
-	for _, e := range array {
-		if value == e {
-			count++
-		}
-	}
-	return count
-}
-
-//	func openFile(fileName string) string {
-//		file, error := os.Open(fileName)
-//		if error != nil {
-//			fmt.Print("Error :(")
-//			log.Fatal(error)
-//		}
-//		defer func() {
-//			if error = file.Close(); error != nil {
-//				log.Fatal(error)
-//			}
-//		}()
-//		bytes, error := io.ReadAll(file)
-//		return string(bytes)
-//	}
-func remove(slice []int, s int) []int {
-	return append(slice[:s], slice[s+1:]...)
-}
-
-func getSmallest(array []int) (int, int) {
-	smallestE := array[0]
-	indexSmallest := 0
-	for i, e := range array {
-		if e < smallestE {
-			smallestE = e
-			indexSmallest = i
-		}
-	}
-	return smallestE, indexSmallest
-}
 
 // Part 1
 func diffSum(firstListInput []int, secondListInput []int) {
@@ -82,16 +20,16 @@ func diffSum(firstListInput []int, secondListInput []int) {
 	sum := 0
 	for i := range firstList {
 		fmt.Println(i)
-		smallestFirst, indexSmallestFirst := getSmallest(firstList)
-		smallestSecond, indexSmallestSecond := getSmallest(secondList)
+		smallestFirst, indexSmallestFirst := shared.GetSmallest(firstList)
+		smallestSecond, indexSmallestSecond := shared.GetSmallest(secondList)
 		fmt.Println("1st", smallestFirst, "2nd", smallestSecond)
 
-		diffLocal := abSub(smallestFirst, smallestSecond)
+		diffLocal := shared.AbSub(smallestFirst, smallestSecond)
 		fmt.Println("diffLocal", diffLocal)
 		sum += diffLocal
 
-		firstList = remove(firstList, indexSmallestFirst)
-		secondList = remove(secondList, indexSmallestSecond)
+		firstList = shared.Remove(firstList, indexSmallestFirst)
+		secondList = shared.Remove(secondList, indexSmallestSecond)
 
 	}
 
@@ -109,7 +47,7 @@ func similarySum(firstListInput []int, secondListInput []int) {
 
 		fmt.Println("1st", firstN)
 
-		similaryCount = containsCount(secondList, firstN)
+		similaryCount = shared.ContainsCount(secondList, firstN)
 		similaryCount *= firstN
 		fmt.Println("similaryCount", similaryCount)
 		sum += similaryCount
@@ -123,7 +61,7 @@ func main() {
 	// inputSizes := []int{1, 4}
 	// inputSizes := []int{5, 8}
 	print(inputSizes[1])
-	lines, err := readLines("input-day-1.txt")
+	lines, err := shared.ReadLines("day-1/input-day-1.txt")
 	if err != nil {
 		log.Fatalf("readFail: %s", err)
 	}
