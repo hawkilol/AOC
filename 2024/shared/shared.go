@@ -2,6 +2,8 @@ package shared
 
 import (
 	"bufio"
+	"strconv"
+
 	// "io"
 	"os"
 )
@@ -37,6 +39,40 @@ func ContainsCount(array []int, value int) int {
 	return count
 }
 
+func Contains(array []int, value int) bool {
+	for _, e := range array {
+		if value == e {
+			return true
+		}
+	}
+	return false
+}
+
+func ContainString(array []string, value string) bool {
+	for _, e := range array {
+		if value == e {
+			return true
+		}
+	}
+	return false
+}
+func ContainStringIndex(array []string, value string) (bool, int) {
+	for i, e := range array {
+		if value == e {
+			return true, i
+		}
+	}
+	return false, 0
+}
+func ContainIntIndex(array []int, value int) (bool, int) {
+	for i, e := range array {
+		if value == e {
+			return true, i
+		}
+	}
+	return false, 0
+}
+
 //	func openFile(fileName string) string {
 //		file, error := os.Open(fileName)
 //		if error != nil {
@@ -65,4 +101,56 @@ func GetSmallest(array []int) (int, int) {
 		}
 	}
 	return smallestE, indexSmallest
+}
+
+func IsInt(stringInput string) bool {
+	if _, err := strconv.Atoi(stringInput); err == nil {
+		return true
+	}
+	return false
+}
+
+func CheckCondition(arrayInput []int, condition func(int, int) bool) (bool, int) {
+	isCondition := false
+	increment := 0
+	prevIncrement := 0
+
+	array := append([]int(nil), arrayInput...)
+
+	for i, curr := range array[1:] {
+		//fmt.Println("index: ", i, "Current: ", curr)
+
+		prev := array[i]
+		if condition(prev, curr) {
+			currIncrement := AbSub(prev, curr)
+			if prevIncrement < currIncrement {
+				increment = currIncrement
+				prevIncrement = increment
+			}
+			//fmt.Println("Increment: ", increment)
+		} else {
+			return false, increment
+		}
+	}
+	isCondition = true
+
+	return isCondition, increment
+}
+
+func DecreaseCheck(array []int) (bool, int) {
+	return CheckCondition(array, func(prev, curr int) bool { return prev > curr })
+}
+func IncreaseCheck(array []int) (bool, int) {
+	return CheckCondition(array, func(prev, curr int) bool { return prev < curr })
+}
+func IncreaseOrEqualCheck(array []int) (bool, int) {
+	return CheckCondition(array, func(prev, curr int) bool { return prev <= curr })
+}
+
+func RangeSlice(start, end int) []int {
+	slice := make([]int, 0, end-start+1)
+	for i := start; i <= end; i++ {
+		slice = append(slice, i)
+	}
+	return slice
 }

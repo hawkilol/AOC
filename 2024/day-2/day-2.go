@@ -9,40 +9,6 @@ import (
 	"log"
 )
 
-func checkCondition(arrayInput []int, condition func(int, int) bool) (bool, int) {
-	isCondition := false
-	increment := 0
-	prevIncrement := 0
-
-	array := append([]int(nil), arrayInput...)
-
-	for i, curr := range array[1:] {
-		//fmt.Println("index: ", i, "Current: ", curr)
-
-		prev := array[i]
-		if condition(prev, curr) {
-			currIncrement := shared.AbSub(prev, curr)
-			if prevIncrement < currIncrement {
-				increment = currIncrement
-				prevIncrement = increment
-			}
-			//fmt.Println("Increment: ", increment)
-		} else {
-			return false, increment
-		}
-	}
-	isCondition = true
-
-	return isCondition, increment
-}
-
-func decreaseCheck(array []int) (bool, int) {
-	return checkCondition(array, func(prev, curr int) bool { return prev > curr })
-}
-func increaseCheck(array []int) (bool, int) {
-	return checkCondition(array, func(prev, curr int) bool { return prev < curr })
-}
-
 // part 1
 func checkSafe(linesInput []string) int {
 	lines := append([]string(nil), linesInput...)
@@ -70,10 +36,10 @@ func checkSafe(linesInput []string) int {
 		numberString = ""
 		fmt.Println("lineArray", lineArray)
 
-		decrease, incrementDecrease := decreaseCheck(lineArray)
+		decrease, incrementDecrease := shared.DecreaseCheck(lineArray)
 		fmt.Println("Decrease: ", decrease, "Increment: ", incrementDecrease)
 
-		increase, incrementIncrease := increaseCheck(lineArray)
+		increase, incrementIncrease := shared.IncreaseCheck(lineArray)
 		fmt.Println("Increase: ", increase, "Increment: ", incrementIncrease)
 
 		if (decrease && (incrementDecrease <= 3)) || increase && (incrementIncrease <= 3) {
@@ -124,9 +90,9 @@ func checkSafe2(linesInput []string) int {
 		lineArrayCopy := append([]int(nil), lineArray...)
 
 	try_again:
-		decrease, incrementDecrease := decreaseCheck(lineArrayCopy)
+		decrease, incrementDecrease := shared.DecreaseCheck(lineArrayCopy)
 		fmt.Println("Decrease: ", decrease, "Increment: ", incrementDecrease)
-		increase, incrementIncrease := increaseCheck(lineArrayCopy)
+		increase, incrementIncrease := shared.IncreaseCheck(lineArrayCopy)
 		fmt.Println("Increase: ", increase, "Increment: ", incrementIncrease)
 
 		if (decrease && (incrementDecrease <= 3)) || increase && (incrementIncrease <= 3) {
