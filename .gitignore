@@ -12,6 +12,7 @@
 hello.go
 day-2-scrap.go
 day-3-regex.go
+day-4-scrap.go
 # Test binary, built with `go test -c`
 *.test
 

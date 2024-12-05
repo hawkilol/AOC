@@ -64,6 +64,17 @@ func ContainStringIndex(array []string, value string) (bool, int) {
 	}
 	return false, 0
 }
+func ContainLastStringIndex(array []string, value string) (bool, int) {
+	match := false
+	indexMatch := 0
+	for i, e := range array {
+		if value == e {
+			match = true
+			indexMatch = i
+		}
+	}
+	return match, indexMatch
+}
 func ContainIntIndex(array []int, value int) (bool, int) {
 	for i, e := range array {
 		if value == e {
